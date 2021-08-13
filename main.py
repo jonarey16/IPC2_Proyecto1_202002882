@@ -1,3 +1,6 @@
+def lecturaarchivo():
+    print("Prueba")
+
 
 def menu():
     ans = True
@@ -11,6 +14,7 @@ def menu():
         print(" 6.Salir")
         ans = input("Eliga una opción: ")
         if ans == "1":
+            lecturaarchivo()
             print("Archivo cargado")
         elif ans == "2":
             print("Archivo procesado con exito")
