@@ -1,11 +1,19 @@
-import xml.etree.ElementTree as ET
+from xml.dom import minidom
 
 
 def lecturaarchivo(ruta):
-    mytree = ET.parse(ruta)
-    myroot = mytree.getroot()
-    for x in myroot[0]:
-        print(x.tag,x.attrib)
+    global archivo
+    archivo = minidom.parse(ruta)
+
+
+def procesarterreno():
+    t = input("Ingrese el Terreno que quiere analizar: ")
+    terreno = archivo.getAttribute(t)
+    for elem in terreno:
+        posicion = elem.getElementsByTagName("x")[0]
+        print("Posicion:",posicion.firstChild.data)
+
+
 
 def menu():
     ans = True
@@ -24,6 +32,7 @@ def menu():
             lecturaarchivo(ruta)
             print("Archivo cargado\n")
         elif ans == "2":
+            procesarterreno()
             print("Archivo procesado con exito")
             print()
         elif ans == "3":
@@ -41,4 +50,3 @@ def menu():
 
 if __name__ == '__main__':
     menu()
-
