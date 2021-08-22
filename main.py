@@ -1,4 +1,4 @@
-import xml.etree.ElementTree as ET
+from xml.dom.minidom import parse
 
 
 class Node:
@@ -44,15 +44,37 @@ class LinkedList:
 
 
 def lecturaarchivo(ruta):
-    global tree, root
+    global doc, rootNode
     try :
-        tree = ET.parse(ruta)
-        root = tree.getroot()
+        domTree = parse(ruta)
+        rootNode = domTree.documentElement
         print("Archivo cargado\n")
+
+        terrenos = rootNode.getElementsByTagName("terreno")
+
+        for terreno in terrenos:
+            print("Nombre:", terreno.getAttribute("nombre"))
+            dimension = terreno.getElementsByTagName("dimension")[0]
+            m = dimension.getElementsByTagName("m")[0].childNodes[0].data
+            n = dimension.getElementsByTagName("n")[0].childNodes[0].data
+
+            posicioninicio = terreno.getElementsByTagName("posicioninicio")[0]
+            x_i = posicioninicio.getElementsByTagName("x")[0].childNodes[0].data
+            y_i = posicioninicio.getElementsByTagName("y")[0].childNodes[0].data
+
+            posicionfinal = terreno.getElementsByTagName("posicionfin")[0]
+            x_f = posicionfinal.getElementsByTagName("x")[0].childNodes[0].data
+            y_f = posicionfinal.getElementsByTagName("y")[0].childNodes[0].data
+
+            print(m)
+            print(n)
+            print(x_i)
+            print(y_i)
+            print(x_f)
+            print(y_f)
+
     except:
         print("Archivo Invalido --> Debe de ser un archivo .xml")
-
-
 
 def procesarterreno():
     t = input("Eliga el terreno que quiere procesar")
