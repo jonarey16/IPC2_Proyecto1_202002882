@@ -1,18 +1,61 @@
-from xml.dom import minidom
+import xml.etree.ElementTree as ET
+
+
+class Node:
+    def __init__(self, value):
+        self.value = value
+        self.next = None
+
+    def __str__(self):
+        return str(self.value)
+
+
+class LinkedList:
+    def __init__(self):
+        self.First = None
+        self.Size = 0
+
+    def Append(self, Value):
+        MyNode = Node(Value)
+        if self.Size == 0:
+            self.First = MyNode
+        else:
+            Current = self.First
+            while Current.next != None:
+                Current = Current.next
+            Current.next = MyNode
+
+        self.Size += 1
+        return MyNode
+
+    def __len__(self):
+        return self.Size
+
+    def __str__(self):
+        String = "["
+        Current = self.First
+        for i in range(len(self)):
+            String += str(Current)
+            if i != len(self) - 1:
+                String += str(", ")
+            Current = Current.next
+        String += "]"
+        return String
 
 
 def lecturaarchivo(ruta):
-    global archivo
-    archivo = minidom.parse(ruta)
+    global tree, root
+    try :
+        tree = ET.parse(ruta)
+        root = tree.getroot()
+        print("Archivo cargado\n")
+    except:
+        print("Archivo Invalido --> Debe de ser un archivo .xml")
+
 
 
 def procesarterreno():
-    t = input("Ingrese el Terreno que quiere analizar: ")
-    terreno = archivo.getAttribute(t)
-    for elem in terreno:
-        posicion = elem.getElementsByTagName("x")[0]
-        print("Posicion:",posicion.firstChild.data)
-
+    t = input("Eliga el terreno que quiere procesar")
 
 
 def menu():
@@ -30,7 +73,6 @@ def menu():
         if ans == "1":
             ruta = input("Ingrese la ruta del archivo: ")
             lecturaarchivo(ruta)
-            print("Archivo cargado\n")
         elif ans == "2":
             procesarterreno()
             print("Archivo procesado con exito")
