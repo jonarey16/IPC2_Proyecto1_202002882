@@ -2,6 +2,16 @@ from xml.dom.minidom import parse
 from xml.etree import ElementTree as ET
 
 
+class Nodo:
+    def __init__(self, value, data):
+        self.value = value
+        self.data = data
+        self.next = None
+
+    def __str__(self):
+        return str(self.value)
+
+
 class Matriz:
     def __init__(self, name: str, m: int, n: int):
         self.name = name
@@ -39,23 +49,13 @@ class Matriz:
         print()
 
 
-class Nodo:
-    def __init__(self, value, data):
-        self.value = value
-        self.data = data
-        self.next = None
-
-    def __str__(self):
-        return str(self.value)
-
-
 class ListaEnlazada:
     def __init__(self):
         self.head = None
 
     # Ver si esta vacío
     def is_void(self):
-        return self.head == None
+        return self.head is None
 
     # Insertar al inicio
     def add_to_head(self, data):
@@ -67,7 +67,7 @@ class ListaEnlazada:
             self.head = Nodo(None, data)
             return
         node = self.head
-        while node.next != None:
+        while node.next is not None:
             node = node.next
         node.next = Nodo(None, data)
 
@@ -75,7 +75,7 @@ class ListaEnlazada:
     def get_size(self):
         count = 0
         node = self.head
-        while node != None:
+        while node is not None:
             node = node.next
             count = count + 1
         return count
@@ -92,7 +92,7 @@ class ListaEnlazada:
         if self.is_void():
             return None
         node = self.head
-        while node.next != None:
+        while node.next is not None:
             node = node.next
         return node.data
 
@@ -100,7 +100,7 @@ class ListaEnlazada:
     def get_by_index(self, index: int):
         count = 0
         node = self.head
-        while node != None:
+        while node is not None:
             if index == count:
                 return node.data
             count = count + 1
@@ -111,7 +111,7 @@ class ListaEnlazada:
     def set_by_index(self, index: int, data):
         count = 0
         node = self.head
-        while node != None:
+        while node is not None:
             if index == count:
                 node.data = data
                 return
@@ -129,7 +129,7 @@ class ListaEnlazada:
         if not self.is_void():
             node = self.head
             prev = None
-            while node.next != None:
+            while node.next is not None:
                 prev = node
                 node = node.next
             if self.get_size() == 1:
@@ -145,7 +145,7 @@ class ListaEnlazada:
         count = 0
         node = self.head
         prev = None
-        while node != None:
+        while node is not None:
             if index == count:
                 prev.next = node.next
             prev = node
@@ -160,8 +160,8 @@ class ListaEnlazada:
     def print_list(self):
         if not self.is_void():
             node = self.head
-            while node != None:
-                print('{}'.format(node.data), end=' -> ')
+            while node is not None:
+                print('{}'.format(node.data), end=' | ')
                 node = node.next
             print()
         else:
@@ -188,13 +188,28 @@ def lecturaarchivo(data: ListaEnlazada):
         posicionfinal = terreno.getElementsByTagName("posicionfin")[0]
         x_f = posicionfinal.getElementsByTagName("x")[0].childNodes[0].data
         y_f = posicionfinal.getElementsByTagName("y")[0].childNodes[0].data
+        matrizej = Matriz(nombre, int(m), int(n))
+        matrizej.print_matrix()
         data.add_to_end(Matriz(nombre, int(m), int(n)))
-        for pos in terrenos:
-            posicion = pos.getElementsByTagName("posicion")[0].childNodes[0].data
-            print(posicion)
+
+        posicion = terreno.getElementsByTagName("posicion")
+        for element in posicion:
+            x = element.getAttribute("x")
+            y = element.getAttribute("y")
+            pos = element.childNodes[0].data
+            # data.get_last().insert(int(x)-1, int(y)-1, pos)
+
 
 def procesarterreno():
     t = input("Eliga el terreno que quiere procesar")
+
+
+def mostrar_info():
+    print(">> Jonatan David Reyna Monterroso")
+    print(">> 202002882")
+    print(">> Introducción a la Programación 2 Sección B")
+    print(">> Ingeniería en Sistemas")
+    print(">> 4to Semestre")
 
 
 def menu(data: ListaEnlazada):
@@ -218,11 +233,7 @@ def menu(data: ListaEnlazada):
         elif ans == "3":
             print("Se escribió la ruta especifica")
         elif ans == "4":
-            print(">> Jonatan David Reyna Monterroso")
-            print(">> 202002882")
-            print(">> Introducción a la Programación 2 Sección B")
-            print(">> Ingeniería en Sistemas")
-            print(">> 4to Semestre")
+            mostrar_info()
         elif ans == "5":
             print("Grafica generada")
         elif ans == "6":
